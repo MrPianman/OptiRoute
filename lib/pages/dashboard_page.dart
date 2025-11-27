@@ -30,8 +30,7 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   bool _isTrendPositive(String trend, bool lowerIsBetter) {
-    final isIncrease = trend.startsWith('+');
-    return lowerIsBetter ? !isIncrease : isIncrease;
+    return true;
   }
 
   @override
@@ -664,7 +663,6 @@ class _DashboardPageState extends State<DashboardPage> {
             .fold<double>(0, (a, b) => a + b)
             .toStringAsFixed(0);
 
-        final vehiclesTrend = _generateTrend();
         final timeTrend = _generateTrend();
         final fuelTrend = _generateTrend();
         final profitTrend = _generateTrend();
@@ -690,8 +688,6 @@ class _DashboardPageState extends State<DashboardPage> {
                         icon: Icons.directions_car,
                         color: const Color(0xFFFF9800),
                         subtitle: 'Out of ${vehicles.length} total',
-                        trend: "$vehiclesTrend from last week",
-                        isPositiveTrend: _isTrendPositive(vehiclesTrend, false),
                         onTap: () => _showVehicleDetails(context, vehicles),
                       ),
                   MetricCard(

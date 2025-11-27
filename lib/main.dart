@@ -56,8 +56,8 @@ class _RootShellState extends State<RootShell> {
     'Dashboard',
     'Live Map',
     'Reports',
-    'Alerts',
     'Fleet Management',
+    'Alerts',
   ];
 
   @override
@@ -92,11 +92,11 @@ class _RootShellState extends State<RootShell> {
       body: IndexedStack(
         index: _currentIndex,
         children: [
-          DashboardPage(onNavigateToAlerts: () => _navigateToPage(3)),
+          DashboardPage(onNavigateToAlerts: () => _navigateToPage(4)),
           const LiveMapPage(),
           const ReportsPage(),
-          const AlertsPage(),
           const FleetManagementPage(),
+          const AlertsPage(),
         ],
       ),
       bottomNavigationBar: NavigationBar(
@@ -120,15 +120,16 @@ class _RootShellState extends State<RootShell> {
             label: 'Reports',
           ),
           NavigationDestination(
-            icon: Icon(Icons.notifications_outlined, size: 28),
-            selectedIcon: Icon(Icons.notifications, size: 28),
-            label: 'Alerts',
-          ),
-          NavigationDestination(
             icon: Icon(Icons.business_center_outlined, size: 28),
             selectedIcon: Icon(Icons.business_center, size: 28),
             label: 'Fleet',
           ),
+          NavigationDestination(
+            icon: Icon(Icons.notifications_outlined, size: 28),
+            selectedIcon: Icon(Icons.notifications, size: 28),
+            label: 'Alerts',
+          ),
+          
         ],
         onDestinationSelected: (i) => setState(() => _currentIndex = i),
       ),

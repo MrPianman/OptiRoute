@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../data/mock_data.dart';
 import '../models/trip.dart';
 
@@ -157,7 +156,7 @@ class _MetroSection extends StatelessWidget {
                 crossAxisCount: 2,
                 crossAxisSpacing: 12,
                 mainAxisSpacing: 12,
-                childAspectRatio: 2.0,
+                childAspectRatio: 1.55,
               ),
               itemBuilder: (context, index) {
                 final metric = rectangleMetrics[index];
@@ -170,7 +169,7 @@ class _MetroSection extends StatelessWidget {
             if (remaining.isNotEmpty) const SizedBox(height: 16),
             for (var i = 0; i < remaining.length; i++) ...[
               AspectRatio(
-                aspectRatio: 2.4,
+                aspectRatio: 1.95,
                 child: _MetroTile(
                   data: remaining[i],
                   color: colorFor(rectangleMetrics.length + i),
@@ -342,8 +341,8 @@ List<_TileMetric> _metricsFor(_ReportStats stats) {
     ),
     _TileMetric(
       label: 'Carbon Reduction',
-      value: '${stats.carbonReductionKg.clamp(0, double.infinity).toStringAsFixed(1)} kg',
-      helper: 'emissions avoided',
+      value: '${stats.carbonReductionKg > 0 ? '↓' : '↑'} ${stats.carbonReductionKg.abs().clamp(0, double.infinity).toStringAsFixed(1)} kg',
+      helper: 'vs baseline emissions',
     ),
   ];
 }

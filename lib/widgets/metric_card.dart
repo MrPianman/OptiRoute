@@ -32,9 +32,9 @@ class MetricCard extends StatelessWidget {
     final grandmaModeEnabled = ThemeController.instance.grandmaMode.value;
 
     final Color backgroundColor = grandmaModeEnabled
-        ? (isDark
-            ? scheme.surfaceVariant.withValues(alpha: 0.95)
-            : scheme.surface)
+      ? (isDark
+        ? scheme.surfaceContainerHighest.withValues(alpha: 0.95)
+        : scheme.surface)
         : (isDark
             ? cardColor.withValues(alpha: 0.25)
             : cardColor.withValues(alpha: 0.9));
@@ -56,14 +56,14 @@ class MetricCard extends StatelessWidget {
 
     final TextStyle valueStyle = TextStyle(
       color: primaryTextColor,
-      fontSize: grandmaModeEnabled ? 38 : 28,
+      fontSize: grandmaModeEnabled ? 44 : 32,
       fontWeight: FontWeight.bold,
       height: 1,
     );
 
     final TextStyle detailStyle = TextStyle(
       color: secondaryTextColor,
-      fontSize: grandmaModeEnabled ? 14 : 11,
+      fontSize: grandmaModeEnabled ? 16 : 12,
       fontWeight: grandmaModeEnabled ? FontWeight.w600 : FontWeight.w400,
     );
     
