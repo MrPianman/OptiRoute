@@ -88,21 +88,23 @@ List<FleetAlert> mockAlerts() {
 }
 
 List<Trip> mockTrips() {
-  return List.generate(12, (i) {
+  // Align trip data to the seeded vehicles so downstream views rank real vehicles.
+  return List.generate(_vehicleSeedData.length, (i) {
+    final seed = _vehicleSeedData[i];
     final start = DateTime.now().subtract(Duration(days: i + 1));
     final end = start.add(Duration(hours: 3 + rnd.nextInt(5)));
-    final dist = 50 + rnd.nextDouble() * 120;
-    final fuel = dist / (8 + rnd.nextDouble() * 6);
-    final profit = 100 + rnd.nextDouble() * 400;
-    final curr = rnd.nextInt(5);
-    final all = curr + rnd.nextInt(5);
+    final dist = 80 + rnd.nextDouble() * 60;
+    final fuel = dist / (8 + rnd.nextDouble() * 4);
+    final all = 4 + rnd.nextInt(4); // 4–7 assigned
+    final curr = 1 + rnd.nextInt(all.clamp(1, 7)); // at least one completed
+
     return Trip(
-      id: 'T-$i',
+      id: seed['id'] as String,
       start: start,
       end: end,
       distanceKm: dist,
       fuelUsedL: fuel,
-      profit: profit,
+      profit: 500 + rnd.nextDouble() * 500,
       curr: curr,
       all: all,
     );

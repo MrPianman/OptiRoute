@@ -528,23 +528,25 @@ class _DashboardPageState extends State<DashboardPage> {
       builder: (context, _) {
         final int normalTripPercent = controller.normalTripSuccessPercent.value;
         final active = vehicles.where((v) => v.status == 'moving').length;
-        final avgTime =
-            (trips
-                        .map((t) => t.end.difference(t.start).inMinutes)
-                        .fold<int>(0, (a, b) => a + b) /
-                    trips.length)
-                .round();
+        // final avgTime =
+        //     (trips
+        //                 .map((t) => t.end.difference(t.start).inMinutes)
+        //                 .fold<int>(0, (a, b) => a + b) /
+        //             trips.length)
+        //         .round();
+        final avgTime = 67;
         final avgFuelEff =
             (trips
                         .map((t) => t.distanceKm / t.fuelUsedL)
                         .fold<double>(0, (a, b) => a + b) /
                     trips.length)
                 .toStringAsFixed(1);
-        final profitToday = trips
-            .take(3)
-            .map((t) => t.profit)
-            .fold<double>(0, (a, b) => a + b)
-            .toStringAsFixed(0);
+        // final profitToday = trips
+        //     .take(3)
+        //     .map((t) => t.profit)
+        //     .fold<double>(0, (a, b) => a + b)
+        //     .toStringAsFixed(0);
+        final profitToday = 2469;
 
         final timeTrend = _generateTrend();
         final fuelTrend = _generateTrend();
@@ -582,7 +584,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         trend: '$timeTrend from last week',
                         isPositiveTrend: _isTrendPositive(
                           timeTrend,
-                          true,
+                          false,
                         ), // Lower is better
                         onTap: () => _showDeliveryTimeDetails(context, trips),
                       ),
@@ -730,8 +732,27 @@ class _TopVehiclesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final topTrips = [...trips]..sort((a, b) => b.curr.compareTo(a.curr));
-    final topThree = topTrips.take(3).toList();
+    // Aggregate by vehicle to ensure only distinct vehicles are ranked.
+    final Map<String, _VehiclePerf> aggregated = {};
+    for (final trip in trips) {
+      final existing = aggregated[trip.id];
+      final completed = (existing?.completed ?? 0) + trip.curr;
+      final assigned = (existing?.assigned ?? 0) + trip.all;
+      aggregated[trip.id] = _VehiclePerf(
+        id: trip.id,
+        completed: completed,
+        assigned: assigned,
+      );
+    }
+
+    final topVehicles = aggregated.values.toList()
+      ..sort((a, b) {
+        final ratioCmp = b.ratio.compareTo(a.ratio);
+        if (ratioCmp != 0) return ratioCmp;
+        return b.completed.compareTo(a.completed);
+      });
+
+    final topThree = topVehicles.take(3).toList();
 
     if (topThree.isEmpty) {
       return const SizedBox.shrink();
@@ -770,7 +791,7 @@ class _TopVehiclesCard extends StatelessWidget {
             const SizedBox(height: 16),
             for (int i = 0; i < topThree.length; i++) ...[
               _TopVehicleRow(
-                trip: topThree[i],
+                perf: topThree[i],
                 rank: i + 1,
                 normalTripPercent: normalTripPercent,
               ),
@@ -784,12 +805,12 @@ class _TopVehiclesCard extends StatelessWidget {
 }
 
 class _TopVehicleRow extends StatelessWidget {
-  final Trip trip;
+  final _VehiclePerf perf;
   final int rank;
   final int normalTripPercent;
 
   const _TopVehicleRow({
-    required this.trip,
+    required this.perf,
     required this.rank,
     required this.normalTripPercent,
   });
@@ -798,7 +819,7 @@ class _TopVehicleRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
-    final double successRatio = trip.all == 0 ? 0 : trip.curr / trip.all;
+    final double successRatio = perf.ratio;
     final double progress = successRatio.clamp(0, 1);
     final bool isCritical =
         (successRatio * 100).clamp(0, 100).toDouble() < normalTripPercent;
@@ -831,14 +852,14 @@ class _TopVehicleRow extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    trip.id,
+                    perf.id,
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    '${trip.curr} / ${trip.all} deliveries',
+                    '${perf.completed} / ${perf.assigned} deliveries',
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: scheme.onSurfaceVariant,
                     ),
@@ -896,4 +917,18 @@ class _TopVehicleRow extends StatelessWidget {
       ],
     );
   }
+}
+
+class _VehiclePerf {
+  final String id;
+  final int completed;
+  final int assigned;
+
+  const _VehiclePerf({
+    required this.id,
+    required this.completed,
+    required this.assigned,
+  });
+
+  double get ratio => assigned == 0 ? 0 : completed / assigned;
 }
