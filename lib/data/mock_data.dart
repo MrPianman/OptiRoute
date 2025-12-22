@@ -13,6 +13,8 @@ final List<Map<String, Object?>> _vehicleSeedData = [
     'driver': 'Alice',
     'plate': 'ESC 001',
     'note': 'Hello World XD',
+    'expectedMinutes': 65,
+    'profit': 617.0,
     'market': [
       {'name': 'Onion', 'received': true},
       {'name': 'Garlic', 'received': false},
@@ -25,6 +27,8 @@ final List<Map<String, Object?>> _vehicleSeedData = [
     'driver': 'Bob',
     'plate': 'KOS 001',
     'note': 'Hello World XD',
+    'expectedMinutes': 70,
+    'profit': 620.0,
     'market': [
       {'name': 'Carrot', 'received': true},
       {'name': 'Potato', 'received': true},
@@ -37,6 +41,8 @@ final List<Map<String, Object?>> _vehicleSeedData = [
     'driver': 'Charlie',
     'plate': 'ESC 002',
     'note': 'Hello World XD',
+    'expectedMinutes': 66,
+    'profit': 613.0,
     'market': [
       {'name': 'Cabbage', 'received': false},
       {'name': 'Chicken Breast', 'received': true},
@@ -48,6 +54,8 @@ final List<Map<String, Object?>> _vehicleSeedData = [
     'driver': 'Diana',
     'plate': 'KOS 002',
     'note': 'Hello World XD',
+    'expectedMinutes': 67,
+    'profit': 619.0,
     'market': [
       {'name': 'Rice', 'received': true},
       {'name': 'Fish Sauce', 'received': true},
@@ -92,7 +100,8 @@ List<Trip> mockTrips() {
   return List.generate(_vehicleSeedData.length, (i) {
     final seed = _vehicleSeedData[i];
     final start = DateTime.now().subtract(Duration(days: i + 1));
-    final end = start.add(Duration(hours: 3 + rnd.nextInt(5)));
+    final int expectedMinutes = (seed['expectedMinutes'] as int?) ?? 60;
+    final end = start.add(Duration(minutes: expectedMinutes));
     final dist = 80 + rnd.nextDouble() * 60;
     final fuel = dist / (8 + rnd.nextDouble() * 4);
     final all = 4 + rnd.nextInt(4); // 4–7 assigned
@@ -102,9 +111,11 @@ List<Trip> mockTrips() {
       id: seed['id'] as String,
       start: start,
       end: end,
+      expectedMinutes: expectedMinutes,
       distanceKm: dist,
       fuelUsedL: fuel,
-      profit: 500 + rnd.nextDouble() * 500,
+      profit: (seed['profit'] as num?)?.toDouble() ??
+          500 + rnd.nextDouble() * 500,
       curr: curr,
       all: all,
     );

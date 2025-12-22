@@ -2,6 +2,7 @@ class Trip {
   final String id;
   final DateTime start;
   final DateTime end;
+  final int expectedMinutes;
   final double distanceKm;
   final double fuelUsedL;
   final double profit;
@@ -14,6 +15,7 @@ class Trip {
     required this.curr,
     required this.start,
     required this.end,
+    required this.expectedMinutes,
     required this.distanceKm,
     required this.fuelUsedL,
     required this.profit,

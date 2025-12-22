@@ -28,7 +28,7 @@ class ProfitDetailsPage extends StatelessWidget {
                   children: [
                     Text('Total Profit', style: theme.textTheme.titleMedium),
                     Text(
-                      '\$${totalProfit.toStringAsFixed(2)}',
+                      '${totalProfit.toStringAsFixed(2)}THB',
                       style: theme.textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: theme.colorScheme.onPrimaryContainer,
@@ -80,7 +80,7 @@ class ProfitDetailsPage extends StatelessWidget {
                     ),
                     subtitle: Text('${trip.distanceKm.toStringAsFixed(1)} km'),
                     trailing: Text(
-                      '\$${trip.profit.toStringAsFixed(2)}',
+                      '${trip.profit.toStringAsFixed(2)}THB',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,

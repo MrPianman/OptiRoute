@@ -258,45 +258,13 @@ class _DashboardPageState extends State<DashboardPage> {
                   ).textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
                 ),
                 const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.blue.withValues(alpha: 0.05),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: Colors.blue.withValues(alpha: 0.2),
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.info_outline,
-                        size: 16,
-                        color: Colors.blue[700],
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          'Track delivery times for each trip. Faster deliveries improve customer satisfaction and allow more trips per day.',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey[700],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
                 Expanded(
                   child: ListView.separated(
                     itemCount: trips.length,
                     separatorBuilder: (_, __) => const Divider(),
                     itemBuilder: (context, index) {
                       final trip = trips[index];
-                      final duration = trip.end
-                          .difference(trip.start)
-                          .inMinutes;
+                      final duration = trip.expectedMinutes;
                       return ListTile(
                         leading: Container(
                           width: 48,
@@ -410,36 +378,6 @@ class _DashboardPageState extends State<DashboardPage> {
                   ).textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
                 ),
                 const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.cyan.withValues(alpha: 0.05),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: Colors.cyan.withValues(alpha: 0.2),
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.info_outline,
-                        size: 16,
-                        color: Colors.cyan[700],
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          'Monitor fuel consumption efficiency (km/L) for each trip. Green indicates good efficiency (>8 km/L), orange needs attention.',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey[700],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
                 Expanded(
                   child: ListView.separated(
                     itemCount: trips.length,
@@ -485,7 +423,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               ),
                             ),
                             Text(
-                              'km/L',
+                              'L/km',
                               style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey[600],
@@ -541,12 +479,10 @@ class _DashboardPageState extends State<DashboardPage> {
                         .fold<double>(0, (a, b) => a + b) /
                     trips.length)
                 .toStringAsFixed(1);
-        // final profitToday = trips
-        //     .take(3)
-        //     .map((t) => t.profit)
-        //     .fold<double>(0, (a, b) => a + b)
-        //     .toStringAsFixed(0);
-        final profitToday = 2469;
+        final profitToday = trips
+          .map((t) => t.profit)
+          .fold<double>(0, (a, b) => a + b)
+          .toStringAsFixed(0);
 
         final timeTrend = _generateTrend();
         final fuelTrend = _generateTrend();
