@@ -1,4 +1,5 @@
-# Application for 
+# The Application
+Application for project "OptiRoute: A Route Optimization Application for Minimize Fuel Consumption in Ingredient Logistics"
 ### Made for ESC17 and SciUS17  
 For educational purpose only
 
