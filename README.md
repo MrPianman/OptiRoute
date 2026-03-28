@@ -1,16 +1,7 @@
-# revnotwo
+# Application for 
+### Made for ESC17 and SciUS17  
+For educational purpose only
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Tools:
+- Flutter: An open-source UI software development kit used to develop cross platform applications from a single codebase.
+- Dart: A client-optimized language for developing fast apps on any platform for FLutter framework.
